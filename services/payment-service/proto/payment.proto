@@ -1,0 +1,134 @@
+syntax = "proto3";
+
+package payment;
+
+option go_package = "./proto";
+
+import "google/protobuf/timestamp.proto";
+
+service PaymentService {
+  rpc CreatePayment(CreatePaymentRequest) returns (CreatePaymentResponse);
+  rpc GetPayment(GetPaymentRequest) returns (GetPaymentResponse);
+  rpc ListPayments(ListPaymentsRequest) returns (ListPaymentsResponse);
+  rpc ConfirmPayment(ConfirmPaymentRequest) returns (ConfirmPaymentResponse);
+  rpc RefundPayment(RefundPaymentRequest) returns (RefundPaymentResponse);
+  rpc CancelPayment(CancelPaymentRequest) returns (CancelPaymentResponse);
+  rpc GenerateInvoice(GenerateInvoiceRequest) returns (GenerateInvoiceResponse);
+  rpc SendPaymentReminder(SendPaymentReminderRequest) returns (SendPaymentReminderResponse);
+  rpc DeletePayment(DeletePaymentRequest) returns (DeletePaymentResponse);
+  rpc UpdatePayment(UpdatePaymentRequest) returns (UpdatePaymentResponse);
+}
+
+message CreatePaymentRequest {
+  double amount = 1;
+  string currency = 2;
+  string customer_email = 3;
+  string description = 4;
+}
+
+message CreatePaymentResponse {
+  string payment_id = 1;
+  string status = 2;
+  google.protobuf.Timestamp created_at = 3;
+}
+
+message GetPaymentRequest {
+  string payment_id = 1;
+}
+
+message GetPaymentResponse {
+  string payment_id = 1;
+  double amount = 2;
+  string currency = 3;
+  string status = 4;
+  string customer_email = 5;
+  string description = 6;
+  google.protobuf.Timestamp created_at = 7;
+  google.protobuf.Timestamp updated_at = 8;
+}
+
+message ListPaymentsRequest {
+  string customer_email = 1;
+  int32 page = 2;
+  int32 limit = 3;
+}
+
+message ListPaymentsResponse {
+  repeated GetPaymentResponse payments = 1;
+  int32 total = 2;
+  int32 page = 3;
+  int32 limit = 4;
+}
+
+message ConfirmPaymentRequest {
+  string payment_id = 1;
+}
+
+message ConfirmPaymentResponse {
+  string payment_id = 1;
+  string status = 2;
+  google.protobuf.Timestamp updated_at = 3;
+}
+
+message RefundPaymentRequest {
+  string payment_id = 1;
+}
+
+message RefundPaymentResponse {
+  string payment_id = 1;
+  string status = 2;
+  google.protobuf.Timestamp refunded_at = 3;
+}
+
+message CancelPaymentRequest {
+  string payment_id = 1;
+}
+
+message CancelPaymentResponse {
+  string payment_id = 1;
+  string status = 2;
+  google.protobuf.Timestamp cancelled_at = 3;
+}
+
+message GenerateInvoiceRequest {
+  string payment_id = 1;
+  bool send_email = 2;
+}
+
+message GenerateInvoiceResponse {
+  string payment_id = 1;
+  string invoice_url = 2;
+  bytes invoice_pdf = 3;
+}
+
+message SendPaymentReminderRequest {
+  string payment_id = 1;
+}
+
+message SendPaymentReminderResponse {
+  string payment_id = 1;
+  bool success = 2;
+  string message = 3;
+}
+
+message DeletePaymentRequest {
+  string payment_id = 1;
+}
+
+message DeletePaymentResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message UpdatePaymentRequest {
+  string payment_id = 1;
+  double amount = 2;
+  string currency = 3;
+  string description = 4;
+}
+
+message UpdatePaymentResponse {
+  string payment_id = 1;
+  string status = 2;
+  google.protobuf.Timestamp updated_at = 3;
+} 

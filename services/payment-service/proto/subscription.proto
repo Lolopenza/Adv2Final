@@ -1,0 +1,79 @@
+syntax = "proto3";
+
+package subscription;
+
+option go_package = "./proto";
+
+import "google/protobuf/timestamp.proto";
+
+service SubscriptionService {
+  rpc CreateSubscription(CreateSubscriptionRequest) returns (CreateSubscriptionResponse);
+  rpc GetSubscription(GetSubscriptionRequest) returns (GetSubscriptionResponse);
+  rpc CancelSubscription(CancelSubscriptionRequest) returns (CancelSubscriptionResponse);
+  rpc RenewSubscription(RenewSubscriptionRequest) returns (RenewSubscriptionResponse);
+  rpc ListSubscriptions(ListSubscriptionsRequest) returns (ListSubscriptionsResponse);
+}
+
+message CreateSubscriptionRequest {
+  string customer_email = 1;
+  string plan_name = 2;
+  double price = 3;
+  string currency = 4;
+}
+
+message CreateSubscriptionResponse {
+  string subscription_id = 1;
+  string status = 2;
+  google.protobuf.Timestamp start_date = 3;
+  google.protobuf.Timestamp end_date = 4;
+}
+
+message GetSubscriptionRequest {
+  string subscription_id = 1;
+}
+
+message GetSubscriptionResponse {
+  string subscription_id = 1;
+  string customer_email = 2;
+  string plan_name = 3;
+  double price = 4;
+  string currency = 5;
+  string status = 6;
+  google.protobuf.Timestamp start_date = 7;
+  google.protobuf.Timestamp end_date = 8;
+  google.protobuf.Timestamp created_at = 9;
+  google.protobuf.Timestamp updated_at = 10;
+}
+
+message CancelSubscriptionRequest {
+  string subscription_id = 1;
+}
+
+message CancelSubscriptionResponse {
+  string subscription_id = 1;
+  string status = 2;
+  google.protobuf.Timestamp updated_at = 3;
+}
+
+message RenewSubscriptionRequest {
+  string subscription_id = 1;
+}
+
+message RenewSubscriptionResponse {
+  string subscription_id = 1;
+  string status = 2;
+  google.protobuf.Timestamp end_date = 3;
+}
+
+message ListSubscriptionsRequest {
+  string customer_email = 1;
+  int32 page = 2;
+  int32 limit = 3;
+}
+
+message ListSubscriptionsResponse {
+  repeated GetSubscriptionResponse subscriptions = 1;
+  int32 total = 2;
+  int32 page = 3;
+  int32 limit = 4;
+} 
