@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+package appointment;
+
+option go_package = "appointment-service/proto";
+
+import "google/protobuf/timestamp.proto";
+
+service AppointmentService {
+  rpc CreateSlot(CreateSlotRequest) returns (SlotResponse);
+  rpc ListSlots(SlotQuery) returns (SlotList);
+  rpc BookAppointment(AppointmentRequest) returns (AppointmentResponse);
+}
+
+message CreateSlotRequest {
+  string business_id = 1;
+  string date = 2;
+  repeated string slots = 3;
+}
+
+message SlotResponse {
+  string id = 1;
+  string business_id = 2;
+  string date = 3;
+  string time = 4;
+  bool is_booked = 5;
+}
+
+message SlotQuery {
+  string business_id = 1;
+  string date = 2;
+}
+
+message SlotList {
+  repeated SlotResponse slots = 1;
+}
+
+message AppointmentRequest {
+  string user_id = 1;
+  string slot_id = 2;
+}
+
+message AppointmentResponse {
+  string id = 1;
+  string user_id = 2;
+  string slot_id = 3;
+  google.protobuf.Timestamp created_at = 4;
+} 
