@@ -1,0 +1,70 @@
+syntax = "proto3";
+
+package auth;
+option go_package = "auth-service/proto";
+
+import "google/protobuf/timestamp.proto";
+
+service AuthService {
+  // User authentication methods
+  rpc Register(RegisterRequest) returns (AuthResponse) {}
+  rpc Login(LoginRequest) returns (AuthResponse) {}
+  rpc GetUserInfo(UserInfoRequest) returns (UserInfoResponse) {}
+  rpc UpdateProfile(UpdateProfileRequest) returns (UpdateResponse) {}
+  rpc ChangePassword(ChangePasswordRequest) returns (ChangePasswordResponse) {}
+}
+
+// Request/Response message definitions
+message RegisterRequest {
+  string username = 1;
+  string email = 2;
+  string password = 3;
+}
+
+message LoginRequest {
+  string email = 1;
+  string password = 2;
+}
+
+message AuthResponse {
+  string token = 1;
+  User user = 2;
+}
+
+message UserInfoRequest {
+  string user_id = 1;
+}
+
+message UserInfoResponse {
+  User user = 1;
+}
+
+message UpdateProfileRequest {
+  string user_id = 1;
+  string username = 2;
+  string email = 3;
+}
+
+message UpdateResponse {
+  string message = 1;
+  User user = 2;
+}
+
+message ChangePasswordRequest {
+  string user_id = 1;
+  string current_password = 2;
+  string new_password = 3;
+}
+
+message ChangePasswordResponse {
+  string message = 1;
+}
+
+// Data models
+message User {
+  string id = 1;
+  string username = 2;
+  string email = 3;
+  google.protobuf.Timestamp created_at = 4;
+  google.protobuf.Timestamp updated_at = 5;
+} 
